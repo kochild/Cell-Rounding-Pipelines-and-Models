@@ -1,0 +1,328 @@
+CellProfiler Pipeline: http://www.cellprofiler.org
+Version:5
+DateRevision:421
+GitHash:
+ModuleCount:19
+HasImagePlaneDetails:False
+
+Images:[module_num:1|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['To begin creating your project, use the Images module to compile a list of files and/or folders that you want to analyze. You can also specify a set of rules to include only the desired files in your selected folders.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    :
+    Filter images?:Images only
+    Select the rule criteria:and (extension does isimage) (directory doesnot containregexp "[\\\\/]\\.")
+
+Metadata:[module_num:2|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['The Metadata module optionally allows you to extract information describing your images (i.e, metadata) which will be stored along with your measurements. This information can be contained in the file name and/or location, or in an external file.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Extract metadata?:Yes
+    Metadata data type:Text
+    Metadata types:{}
+    Extraction method count:2
+    Metadata extraction method:Extract from file/folder names
+    Metadata source:File name
+    Regular expression to extract from file name:(?P<Well>[a-zA-Z][0-9]+)
+    Regular expression to extract from folder name:(?P<Date>[0-9]{4}_[0-9]{2}_[0-9]{2})$
+    Extract metadata from:All images
+    Select the filtering criteria:and (file does contain "")
+    Metadata file location:Elsewhere...|
+    Match file and image metadata:[]
+    Use case insensitive matching?:No
+    Metadata file name:None
+    Does cached metadata exist?:No
+    Metadata extraction method:Extract from file/folder names
+    Metadata source:File name
+    Regular expression to extract from file name:]_(?P<TimePoint>[0-9]+)
+    Regular expression to extract from folder name:(?P<Date>[0-9]{4}_[0-9]{2}_[0-9]{2})$
+    Extract metadata from:All images
+    Select the filtering criteria:and (file does contain "")
+    Metadata file location:Elsewhere...|
+    Match file and image metadata:[]
+    Use case insensitive matching?:No
+    Metadata file name:None
+    Does cached metadata exist?:No
+
+NamesAndTypes:[module_num:3|svn_version:'Unknown'|variable_revision_number:8|show_window:False|notes:['The NamesAndTypes module allows you to assign a meaningful name to each image by which other modules will refer to it.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Assign a name to:Images matching rules
+    Select the image type:Grayscale image
+    Name to assign these images:DNA
+    Match metadata:[]
+    Image set matching method:Order
+    Set intensity range from:Image metadata
+    Assignments count:2
+    Single images count:0
+    Maximum intensity:255.0
+    Process as 3D?:No
+    Relative pixel spacing in X:1.0
+    Relative pixel spacing in Y:1.0
+    Relative pixel spacing in Z:1.0
+    Select the rule criteria:or (file does contain "Texas")
+    Name to assign these images:DNA
+    Name to assign these objects:Cell
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+    Select the rule criteria:or (file does contain "GFP")
+    Name to assign these images:GFP
+    Name to assign these objects:Nucleus
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+
+Groups:[module_num:4|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['The Groups module optionally allows you to split your list of images into image subsets (groups) which will be processed independently of each other. Examples of groupings include screening batches, microtiter plates, time-lapse movies, etc.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Do you want to group your images?:Yes
+    grouping metadata count:1
+    Metadata category:Well
+
+RunCellpose:[module_num:5|svn_version:'Unknown'|variable_revision_number:3|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:GFP
+    Expected object diameter:40
+    Detection mode:cyto2
+    Name the output object:RunCellpose
+    Use GPU:Yes
+    Use averaging:Yes
+    Supply nuclei image as well?:Yes
+    Select the nuclei image:DNA
+    Save probability image?:No
+    Name the probability image:Probabilities
+    Location of the pre-trained model file:Elsewhere...|
+    Pre-trained model file name:cyto_0
+    Flow threshold:1
+    Cell probability threshold:-3
+    GPU memory share for each worker:1
+    Stitch Threshold:0.0
+    Use 3D:No
+    Minimum size:30
+    Z rescaling factor (anisotropy):0.0
+    Use Omnipose for mask reconstruction:No
+    Invert images:No
+
+OverlayOutlines:[module_num:6|svn_version:'Unknown'|variable_revision_number:4|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:No
+    Select image on which to display outlines:GFP
+    Name the output image:OrigOverlay
+    Outline display mode:Color
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Thick
+    Select outline color:#FE01F8
+    Select objects to display:RunCellpose
+
+MeasureObjectSizeShape:[module_num:7|svn_version:'Unknown'|variable_revision_number:3|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select object sets to measure:RunCellpose
+    Calculate the Zernike features?:No
+    Calculate the advanced features?:No
+
+MeasureObjectIntensity:[module_num:8|svn_version:'Unknown'|variable_revision_number:4|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select images to measure:GFP
+    Select objects to measure:RunCellpose
+
+FilterObjects:[module_num:9|svn_version:'Unknown'|variable_revision_number:9|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the objects to filter:RunCellpose
+    Name the output objects:Filter1
+    Select the filtering mode:Measurements
+    Select the filtering method:Limits
+    Select the objects that contain the filtered objects:RunCellpose
+    Select the location of the rules or classifier file:Elsewhere...|
+    Rules or classifier file name:rules.txt
+    Class number:1
+    Measurement count:1
+    Additional object count:0
+    Assign overlapping child to:Both parents
+    Keep removed objects as a seperate set?:No
+    Name the objects removed by the filter:RemovedObjects
+    Select the measurement to filter by:AreaShape_MinFeretDiameter
+    Filter using a minimum measurement value?:Yes
+    Minimum value:17
+    Filter using a maximum measurement value?:Yes
+    Maximum value:60
+
+FilterObjects:[module_num:10|svn_version:'Unknown'|variable_revision_number:9|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the objects to filter:Filter1
+    Name the output objects:Cells
+    Select the filtering mode:Image or mask border
+    Select the filtering method:Limits
+    Select the objects that contain the filtered objects:RunCellpose
+    Select the location of the rules or classifier file:Elsewhere...|
+    Rules or classifier file name:rules.txt
+    Class number:1
+    Measurement count:2
+    Additional object count:0
+    Assign overlapping child to:Both parents
+    Keep removed objects as a seperate set?:No
+    Name the objects removed by the filter:RemovedObjects
+    Select the measurement to filter by:Intensity_MeanIntensity_GFP
+    Filter using a minimum measurement value?:Yes
+    Minimum value:.1
+    Filter using a maximum measurement value?:Yes
+    Maximum value:.6
+    Select the measurement to filter by:AreaShape_Area
+    Filter using a minimum measurement value?:Yes
+    Minimum value:300
+    Filter using a maximum measurement value?:No
+    Maximum value:1.0
+
+MeasureObjectSizeShape:[module_num:11|svn_version:'Unknown'|variable_revision_number:3|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select object sets to measure:Cells
+    Calculate the Zernike features?:No
+    Calculate the advanced features?:No
+
+MeasureObjectIntensity:[module_num:12|svn_version:'Unknown'|variable_revision_number:4|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA, GFP
+    Select objects to measure:Cells
+
+MeasureColocalization:[module_num:13|svn_version:'Unknown'|variable_revision_number:5|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA, GFP
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Within objects
+    Select objects to measure:Cells
+    Run all metrics?:Yes
+    Calculate correlation and slope metrics?:Yes
+    Calculate the Manders coefficients?:Yes
+    Calculate the Rank Weighted Colocalization coefficients?:Yes
+    Calculate the Overlap coefficients?:Yes
+    Calculate the Manders coefficients using Costes auto threshold?:Yes
+    Method for Costes thresholding:Faster
+
+MeasureObjectIntensityDistribution:[module_num:14|svn_version:'Unknown'|variable_revision_number:6|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA, GFP
+    Hidden:1
+    Hidden:1
+    Hidden:0
+    Calculate intensity Zernikes?:Magnitudes and phase
+    Maximum zernike moment:9
+    Select objects to measure:Cells
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Scale the bins?:Yes
+    Number of bins:4
+    Maximum radius:100
+
+FilterObjects:[module_num:15|svn_version:'Unknown'|variable_revision_number:9|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the objects to filter:Cells
+    Name the output objects:Round_cells
+    Select the filtering mode:Classifiers
+    Select the filtering method:Limits
+    Select the objects that contain the filtered objects:None
+    Select the location of the rules or classifier file:Default Input Folder sub-folder|Documents\\GitHub\\CellProfiler\\Models
+    Rules or classifier file name:Caco2_Model_1.model
+    Class name:positive
+    Measurement count:1
+    Additional object count:0
+    Assign overlapping child to:Both parents
+    Keep removed objects as a seperate set?:No
+    Name the objects removed by the filter:RemovedObjects
+    Select the measurement to filter by:AreaShape_Area
+    Filter using a minimum measurement value?:Yes
+    Minimum value:0.0
+    Filter using a maximum measurement value?:Yes
+    Maximum value:1.0
+
+OverlayOutlines:[module_num:16|svn_version:'Unknown'|variable_revision_number:4|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:No
+    Select image on which to display outlines:GFP
+    Name the output image:cell_overlay
+    Outline display mode:Color
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:#FE01F8
+    Select objects to display:Cells
+
+SaveImages:[module_num:17|svn_version:'Unknown'|variable_revision_number:16|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:cell_overlay
+    Select method for constructing file names:From image filename
+    Select image name for file prefix:GFP
+    Enter single file name:OrigBlue
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:Cell_Overlay
+    Saved file format:png
+    Output file location:Default Output Folder sub-folder|Cells
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:Yes
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+ExportToSpreadsheet:[module_num:18|svn_version:'Unknown'|variable_revision_number:13|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:False|wants_pause:False]
+    Select the column delimiter:Comma (",")
+    Add image metadata columns to your object data file?:No
+    Add image file and folder names to your object data file?:No
+    Select the measurements to export:No
+    Calculate the per-image mean values for object measurements?:No
+    Calculate the per-image median values for object measurements?:No
+    Calculate the per-image standard deviation values for object measurements?:No
+    Output file location:Default Output Folder sub-folder|Analysis
+    Create a GenePattern GCT file?:No
+    Select source of sample row name:Metadata
+    Select the image to use as the identifier:None
+    Select the metadata to use as the identifier:None
+    Export all measurement types?:Yes
+    Press button to select measurements:Cells|Number_Object_Number,Cells|Children_Round_cells_Count,Image|Metadata_Series,Image|Metadata_Frame,Image|Metadata_FileLocation,Image|Metadata_TimePoint,Image|Metadata_Well,Image|ExecutionTime_05RunCellpose,Image|ExecutionTime_07MeasureObjectSizeShape,Image|ExecutionTime_14MeasureObjectIntensityDistribution,Image|ExecutionTime_09FilterObjects,Image|ExecutionTime_03NamesAndTypes,Image|ExecutionTime_10FilterObjects,Image|ExecutionTime_15FilterObjects,Image|ExecutionTime_12MeasureObjectIntensity,Image|ExecutionTime_01Images,Image|ExecutionTime_17SaveImages,Image|ExecutionTime_13MeasureColocalization,Image|ExecutionTime_11MeasureObjectSizeShape,Image|ExecutionTime_08MeasureObjectIntensity,Image|ExecutionTime_02Metadata,Image|ExecutionTime_04Groups,Image|ExecutionTime_16OverlayOutlines,Image|ModuleError_01Images,Image|ModuleError_09FilterObjects,Image|ModuleError_07MeasureObjectSizeShape,Image|ModuleError_02Metadata,Image|ModuleError_17SaveImages,Image|ModuleError_03NamesAndTypes,Image|ModuleError_11MeasureObjectSizeShape,Image|ModuleError_12MeasureObjectIntensity,Image|ModuleError_04Groups,Image|ModuleError_13MeasureColocalization,Image|ModuleError_14MeasureObjectIntensityDistribution,Image|ModuleError_05RunCellpose,Image|ModuleError_08MeasureObjectIntensity,Image|ModuleError_10FilterObjects,Image|ModuleError_16OverlayOutlines,Image|ModuleError_15FilterObjects,Image|Frame_DNA,Image|Frame_GFP,Image|Count_Cells,Image|Count_Filter1,Image|Count_Round_cells,Image|Count_RunCellpose,Image|Height_GFP,Image|Height_DNA,Image|FileName_DNA,Image|FileName_GFP,Image|Scaling_DNA,Image|Scaling_GFP,Image|PathName_GFP,Image|PathName_DNA,Image|MD5Digest_GFP,Image|MD5Digest_DNA,Image|Series_GFP,Image|Series_DNA,Image|Group_Number,Image|Group_Index,Image|URL_GFP,Image|URL_DNA,Image|Width_GFP,Image|Width_DNA,RunCellpose|AreaShape_BoundingBoxMinimum_Y,RunCellpose|AreaShape_BoundingBoxMinimum_X,RunCellpose|AreaShape_MaxFeretDiameter,RunCellpose|AreaShape_FormFactor,RunCellpose|AreaShape_Center_Y,RunCellpose|AreaShape_Center_X,RunCellpose|AreaShape_Area,RunCellpose|AreaShape_MeanRadius,RunCellpose|AreaShape_ConvexArea,RunCellpose|AreaShape_MinorAxisLength,RunCellpose|AreaShape_Compactness,RunCellpose|AreaShape_Solidity,RunCellpose|AreaShape_MaximumRadius,RunCellpose|AreaShape_BoundingBoxArea,RunCellpose|AreaShape_EquivalentDiameter,RunCellpose|AreaShape_MinFeretDiameter,RunCellpose|AreaShape_BoundingBoxMaximum_X,RunCellpose|AreaShape_BoundingBoxMaximum_Y,RunCellpose|AreaShape_EulerNumber,RunCellpose|AreaShape_MajorAxisLength,RunCellpose|AreaShape_Perimeter,RunCellpose|AreaShape_Extent,RunCellpose|AreaShape_Eccentricity,RunCellpose|AreaShape_MedianRadius,RunCellpose|AreaShape_Orientation,RunCellpose|Intensity_LowerQuartileIntensity_GFP,RunCellpose|Intensity_UpperQuartileIntensity_GFP,RunCellpose|Intensity_MaxIntensity_GFP,RunCellpose|Intensity_MinIntensityEdge_GFP,RunCellpose|Intensity_MaxIntensityEdge_GFP,RunCellpose|Intensity_MeanIntensity_GFP,RunCellpose|Intensity_MassDisplacement_GFP,RunCellpose|Intensity_MADIntensity_GFP,RunCellpose|Intensity_StdIntensity_GFP,RunCellpose|Intensity_MinIntensity_GFP,RunCellpose|Intensity_IntegratedIntensity_GFP,RunCellpose|Intensity_IntegratedIntensityEdge_GFP,RunCellpose|Intensity_MedianIntensity_GFP,RunCellpose|Intensity_StdIntensityEdge_GFP,RunCellpose|Intensity_MeanIntensityEdge_GFP,RunCellpose|Location_Center_Z,RunCellpose|Location_Center_Y,RunCellpose|Location_Center_X,RunCellpose|Location_MaxIntensity_X_GFP,RunCellpose|Location_MaxIntensity_Y_GFP,RunCellpose|Location_MaxIntensity_Z_GFP,RunCellpose|Location_CenterMassIntensity_X_GFP,RunCellpose|Location_CenterMassIntensity_Y_GFP,RunCellpose|Location_CenterMassIntensity_Z_GFP,RunCellpose|Number_Object_Number,RunCellpose|Children_Filter1_Count,Round_cells|Location_Center_Y,Round_cells|Location_Center_Z,Round_cells|Location_Center_X,Round_cells|Parent_Cells,Round_cells|Number_Object_Number,Filter1|Parent_RunCellpose,Filter1|Location_Center_Z,Filter1|Location_Center_X,Filter1|Location_Center_Y,Filter1|Children_Cells_Count,Filter1|Number_Object_Number,Experiment|Modification_Timestamp,Experiment|Run_Timestamp,Experiment|Metadata_GroupingTags,Experiment|CellProfiler_Version,Experiment|Pipeline_Pipeline
+    Representation of Nan/Inf:NaN
+    Add a prefix to file names?:Yes
+    Filename prefix:CellRounding_
+    Overwrite existing files without warning?:Yes
+    Data to export:Do not use
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+
+ExportToDatabase:[module_num:19|svn_version:'Unknown'|variable_revision_number:28|show_window:True|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Database type:SQLite
+    Database name:DefaultDB
+    Add a prefix to table names?:No
+    Table prefix:MyExpt_
+    Output file location:Default Output Folder sub-folder|Analysis
+    Create a CellProfiler Analyst properties file?:Yes
+    Database host:
+    Username:
+    Password:
+    Name the SQLite database file:Caco2.db
+    Calculate the per-image mean values of object measurements?:No
+    Calculate the per-image median values of object measurements?:No
+    Calculate the per-image standard deviation values of object measurements?:No
+    Calculate the per-well mean values of object measurements?:No
+    Calculate the per-well median values of object measurements?:No
+    Calculate the per-well standard deviation values of object measurements?:No
+    Export measurements for all objects to the database?:Select...
+    Select the objects:Cells
+    Maximum # of characters in a column name:64
+    Create one table per object, a single object table or a single object view?:Single object table
+    Enter an image url prepend if you plan to access your files via http:
+    Write image thumbnails directly to the database?:No
+    Select the images for which you want to save thumbnails:
+    Auto-scale thumbnail pixel intensities?:Yes
+    Select the plate type:96
+    Select the plate metadata:TimePoint
+    Select the well metadata:Well
+    Include information for all images, using default values?:Yes
+    Properties image group count:1
+    Properties group field count:1
+    Properties filter field count:0
+    Workspace measurement count:1
+    Experiment name:Caco2_data
+    Which objects should be used for locations?:Cells
+    Enter a phenotype class table name if using the Classifier tool in CellProfiler Analyst:
+    Export object relationships?:No
+    Overwrite without warning?:Data and schema
+    Access CellProfiler Analyst images via URL?:No
+    Select the classification type:Object
+    Select an image to include:None
+    Use the image name for the display?:Yes
+    Image name:Channel1
+    Channel color:red
+    Do you want to add group fields?:No
+    Enter the name of the group:
+    Enter the per-image columns which define the group, separated by commas:ImageNumber, Image_Metadata_Plate, Image_Metadata_Well
+    Do you want to add filter fields?:No
+    Automatically create a filter for each plate?:No
+    Create a CellProfiler Analyst workspace file?:No
+    Select the measurement display tool:ScatterPlot
+    Type of measurement to plot on the X-axis:Image
+    Enter the object name:None
+    Select the X-axis measurement:None
+    Select the X-axis index:ImageNumber
+    Type of measurement to plot on the Y-axis:Image
+    Enter the object name:None
+    Select the Y-axis measurement:None
+    Select the Y-axis index:ImageNumber
